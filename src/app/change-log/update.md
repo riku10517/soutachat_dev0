@@ -1,25 +1,22 @@
-# Azure Chat Updates
+# そうたチャット アップデート
 
-Below are the updates for the Azure Chat Solution accelerator
+アップデート内容
 
 ## 📂 Chat with file
 
-- In the chat with file feature, you can now see citations within the responses. Simply click on the citation to access the related context.
-
-- You can now upload files to existing chats, allowing you to chat with multiple files simultaneously.
-
+- ファイル付きチャット機能で、回答内に引用を表示できるようになりました。引用をクリックするだけで、関連するコンテキストにアクセスできます。
+  
+- 既存のチャットにファイルをアップロードできるようになり、複数のファイルを同時にチャットできるようになりました。
+  
 ## 🎙️ Speech
-
-Ability to use Azure Speech in conversations. This feature is not enabled by default. To enable this feature, you must set the environment variable `PUBLIC_SPEECH_ENABLED=true` along with the Azure Speech subscription key and region.
-
 ```
-PUBLIC_SPEECH_ENABLED=true
+会話でAzure Speechを使用する機能。この機能はデフォルトでは有効になっていません。この機能を有効にするには、環境変数 `PUBLIC_SPEECH_ENABLED=true` を Azure Speech のサブスクリプションキーとリージョンと共に設定する必要があります。
+
+
 AZURE_SPEECH_REGION="REGION"
 AZURE_SPEECH_KEY="1234...."
 ```
 
 ## 🔑 Environment variable change
 
-Please note that the solution has been upgraded to utilise the most recent version of the OpenAI JavaScript SDK, necessitating the use of the `OPENAI_API_KEY` environment variable.
-
-Ensure that you update the variable name in both your '.env' file and the configuration within Azure App Service or Key Vault, changing it from `AZURE_OPENAI_API_KEY` to `OPENAI_API_KEY`.
+このソリューションはOpenAI JavaScript SDKの最新バージョンを利用するようにアップグレードされており、`OPENAI_API_KEY`環境変数を使用する必要があることに注意してください。

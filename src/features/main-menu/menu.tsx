@@ -7,6 +7,9 @@ import {
   PanelLeftClose,
   PanelRightClose,
   Triangle,
+  Home, //ホームアイコン追加
+  HelpCircle, //ヘルプアイコン追加
+  
 } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "../theme/theme-toggle";
@@ -29,7 +32,7 @@ export const MainMenu = () => {
         >
           {isMenuOpen ? <PanelLeftClose /> : <PanelRightClose />}
         </Button>
-        <Button
+        {/* <Button
           asChild
           className="rounded-full w-[40px] h-[40px] p-1 text-primary"
           variant={"outline"}
@@ -37,14 +40,14 @@ export const MainMenu = () => {
           <Link href="/" title="Home">
             <img src="/ai-icon.png" />
           </Link>
-        </Button>
+        </Button> */}
         <Button
           asChild
           className="rounded-full w-[40px] h-[40px] p-2 text-primary"
           variant={"outline"}
         >
-          <Link href="/" title="Chat">
-            <MessageCircle />
+          <Link href="/" title="Home">
+            <Home /> 
           </Link>
         </Button>
         {session?.user?.isAdmin ? (
@@ -65,8 +68,8 @@ export const MainMenu = () => {
           className="rounded-full w-[40px] h-[40px] p-2 text-primary"
           variant={"outline"}
         >
-          <Link href="/change-log" title="change log" className="relative">
-            <Triangle />
+          <Link href="/change-log" title="Help" className="relative">
+            <HelpCircle />
             <UpdateIndicator />
           </Link>
         </Button>

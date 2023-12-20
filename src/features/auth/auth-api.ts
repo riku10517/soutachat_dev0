@@ -5,11 +5,13 @@ import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { hashValue } from "./helpers";
 
+// Identity Providerの設定を行う関数
 const configureIdentityProvider = () => {
   const providers: Array<Provider> = [];
 
   const adminEmails = process.env.ADMIN_EMAIL_ADDRESS?.split(",").map(email => email.toLowerCase().trim());
 
+  // GitHubの認証プロバイダーを追加
   if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
     providers.push(
       GitHubProvider({
@@ -26,6 +28,7 @@ const configureIdentityProvider = () => {
     );
   }
 
+  // Azure ADの認証プロバイダーを追加
   if (
     process.env.AZURE_AD_CLIENT_ID &&
     process.env.AZURE_AD_CLIENT_SECRET &&
@@ -50,10 +53,9 @@ const configureIdentityProvider = () => {
     );
   }
 
-  // If we're in local dev, add a basic credential provider option as well
-  // (Useful when a dev doesn't have access to create app registration in their tenant)
-  // This currently takes any username and makes a user with it, ignores password
-  // Refer to: https://next-auth.js.org/configuration/providers/credentials
+  // 開発環境の場合、基本的なCredentialプロバイダーも追加
+  // パスワードの検証は行わず、任意のユーザー名でユーザーを作成します
+  // 参考：https://next-auth.js.org/configuration/providers/credentials
   if (process.env.NODE_ENV === "development") {
     providers.push(
       CredentialsProvider({
@@ -63,9 +65,9 @@ const configureIdentityProvider = () => {
           password: { label: "Password", type: "password" },
         },    
         async authorize(credentials, req): Promise<any> {
-          // You can put logic here to validate the credentials and return a user.
-          // We're going to take any username and make a new user with it
-          // Create the id as the hash of the email as per userHashedId (helpers.ts)
+          // 認証情報を検証してユーザーを返すためのロジックをここに記述できます
+          // ここでは、任意のユーザー名で新しいユーザーを作成します
+          // userHashedId（helpers.ts）に基づいてメールのハッシュをIDとして作成します
           const username = credentials?.username || "dev";
           const email = username + "@localhost";
           const user = {
@@ -85,23 +87,47 @@ const configureIdentityProvider = () => {
   return providers;
 };
 
+// NextAuthのオプションを設定
 export const options: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  providers: [...configureIdentityProvider()],
+  providers: [...configureIdentityProvider()], // Identity Providerの設定を適用
   callbacks: {
+
+    //認可機能
+    async signIn({ user, account, profile, email, credentials }) {
+     
+      console.log("===> signIn : ", user.email);  // テスト用出力(削除可)
+     
+      // メールアドレス判定（特定文字列が含まれる場合に認証通過）
+      if (user.email?.includes("@nw."))  // TODO:認証を通す文字列指定
+      {
+        // 認証OK
+        console.log("===> signIn : success");  // テスト用出力(削除可)
+        return true
+      }
+ 
+      // 認証NG
+      console.log("===> signIn : failed");  // テスト用出力(削除可)
+      return false
+    },
+
+
+
     async jwt({token, user, account, profile, isNewUser, session}) {
+      // ユーザーが管理者の場合、JWTトークンにisAdminフラグを追加
       if (user?.isAdmin) {
        token.isAdmin = user.isAdmin
       }
       return token
     },
     async session({session, token, user }) {
+      // セッションにisAdminフラグを追加
       session.user.isAdmin = token.isAdmin as string
       return session
     }
   },
   session: {
-    strategy: "jwt",
+    strategy: "jwt", // セッションストラテジーをJWTに設定
   },
 };
 

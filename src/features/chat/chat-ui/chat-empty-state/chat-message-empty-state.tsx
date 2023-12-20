@@ -18,24 +18,27 @@ export const ChatMessageEmptyState: FC<Prop> = (props) => {
       <div className="col-span-2 gap-5 flex flex-col flex-1">
         <img src="/ai-icon.png" className="w-36" />
         <p className="">
-          Start by just typing your message in the box below. You can also
-          personalise the chat by making changes to the settings on the right.
+          {/* Start by just typing your message in the box below. You can also
+          personalise the chat by making changes to the settings on the right. Personalise*/}
+        こんにちは! そうたチャットです。質問に答えたり、情報を提供したり、タスクのお手伝いをします。 
         </p>
       </div>
       <Card className="col-span-3 flex flex-col gap-5 p-5 ">
         <Typography variant="h4" className="text-primary">
-          Personalise
+          {/* Personalise */}
+          チャットの設定
         </Typography>
 
         <div className="flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">
-            Choose a conversation style
+            {/* Choose a conversation style */}
+          AIが出力する文章のスタイル
           </p>
           <ChatStyleSelector disable={false} />
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">
-            How would you like to chat?
+            {/* How would you like to chat? */}
           </p>
           <ChatTypeSelector disable={false} />
         </div>
